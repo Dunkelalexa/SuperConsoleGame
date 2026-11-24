@@ -5,11 +5,13 @@
 int main()
 {
     Row row;
+    row.AddAtHead('R');
+    row.AddAtHead('G');
     row.AddAtTail('R');
     row.AddAtTail('G');
     row.AddAtTail('B');
-    row.Insert(1, 'X');
-    row.Insert(4, 'Y');
-    row.PrintForward();
+    row.AddAtHead('G');
+    LOG_LN(row.GetCount());
+    LOG_LN(row.GetColorAt(5));
     return 0;
 }
