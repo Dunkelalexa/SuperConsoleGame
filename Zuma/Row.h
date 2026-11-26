@@ -220,6 +220,81 @@ public:
 	}
 
 
+	int CountSameLeft (int index) const
+	{
+		if (index < 0 || index >= count)
+		{
+			return 0;
+		}
+		NodeBall* trackingNode = head;
+		for (int i = 0; i < index; i++)
+		{
+			trackingNode = trackingNode->next;
+		}
+
+		char targetColor = trackingNode->color;								//saves the color
+		int countLeft = 0;													//is going to save the count of the bal to the left
+
+		NodeBall* leftNode = trackingNode->prev;							//leftNode is going to move to the left of the ball we just inserted
+		while (leftNode != nullptr && leftNode->color == targetColor)		//we keep going as leftnode is NOT null and the color of the ball is the same as the target color
+		{
+			countLeft++;													//the count increases when we find a ball of the same color
+			leftNode = leftNode->prev;										//we move to the next ball
+		}
+		return countLeft;													//this is the important number, we will need to know if we have more than 3 balls of the same color together
+	}
+
+	int CountSameRight (int index) const 
+	{
+		if(index < 0 || index >= count)
+		{
+			return 0;
+		}
+		NodeBall* trackingNode = head;
+		for (int i = 0; i < index; i++)
+		{
+			trackingNode = trackingNode->next;
+		}
+
+		char targetColor = trackingNode->color;								
+		int countRight = 0;													
+
+		NodeBall* rightNode = trackingNode->next;							
+		while (rightNode != nullptr && rightNode->color == targetColor)		
+		{
+			countRight++;													
+			rightNode = rightNode->next;										
+		}
+		return countRight;
+	}
+
+	int RemoveGroup(int index, int minSize)				//we pass the index where the new ball is inserted, minSize is the number of balls required to trigger the remove group
+	{
+		if (index < 0 || index >= count)				//check the index is valid
+		{
+			return 0;
+		}
+
+		int left = CountSameLeft(index);				//is calling countsameleft and saving the int in left
+		int right = CountSameRight(index);				//is calling countsameright and saving the int in right
+		int GroupTotal = left + 1 + right;				//doing the math to get the group that is going to be deleted, the 1 is the ball w just inserted
+
+		if (GroupTotal < minSize) {						//checks the group total is enough to be deleted
+			return 0;
+		}
+
+		int startIndex = index - left;					//we only go to the left to find where the group starts
+
+		for (int i = 0; i < GroupTotal; i++)			//for as long as i is less than the group total
+		{
+			RemoveAt(startIndex);						//we call remove at and we pass the start index wich is the index where the firs ball of our group to delete is
+		}
+
+		return GroupTotal;
+
+
+	}
+
 	//for testing the row functions
 	void PrintForward()
 	{
